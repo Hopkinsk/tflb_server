@@ -6,11 +6,15 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-        /*
-		"/participant/$id?"(controller: "participant", parseRequest: true) {
+        
+		"/day/$id?"(controller: "day", parseRequest: true) {
 			action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
 		}
-		*/
+
+        "/study/$id?"(controller: "study", parseRequest: true) {
+            action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
+        }	
+        	
         "/"(view:"/index")
         "500"(view:'/error')
 	}

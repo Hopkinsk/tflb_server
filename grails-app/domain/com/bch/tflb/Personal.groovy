@@ -1,13 +1,14 @@
 package com.bch.tflb
 import java.util.Date
 
+class Personal {
 
-class Marijuana {
-
-	String study_id
+	String study_id 
 	String date
 	Integer dayNumber 
-	Integer used 
+	Date dateCreated
+	Date lastUpdated
+	String title
 
     static constraints = {
     }

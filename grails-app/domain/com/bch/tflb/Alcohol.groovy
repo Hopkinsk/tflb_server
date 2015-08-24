@@ -3,7 +3,7 @@ package com.bch.tflb
 class Alcohol {
 
 	String study_id
-	Date date
+	String date
 	Integer dayNumber 
 	Integer drinks
 

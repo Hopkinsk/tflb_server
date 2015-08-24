@@ -6,7 +6,7 @@ class Study {
 	String studyId 
 	Date dateCreated
 	Date lastUpdated
-
+	
     static constraints = {
     }
 }
