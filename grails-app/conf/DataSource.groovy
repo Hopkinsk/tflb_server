@@ -25,7 +25,7 @@ environments {
 */
     development {
         dataSource {
-            dbCreate = "update"
+            dbCreate = "create-drop"
             url = "jdbc:mysql://localhost/tflb"
             username = "root"
             //password = "mysecretadminpassword"

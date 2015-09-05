@@ -9,9 +9,33 @@ class StudyController {
 
     def studyService
 
+    def list(){
+        println "LIST STUDIES"
+        def studies = Study.findAll()
+        println studies
+        println studies as JSON
+        studies.each { study ->
+            println study as JSON
+
+        }
+/*
+        def studies = Study.find().collect {
+
+            [
+               // id: it.id,
+
+               // studyId: it.study_id,
+                complete: it.complete,
+                safetyTriggered: it.safety_triggered,
+                date: it.dateCreated
+            ]
+        }
+        */
+        render (status: 200, text: (studies as JSON), contentType: "application/json")
+
+    }
 
     def index(params){
-        println "STUDY SHOW"
         if(params.id){
             studyService.getCompleteStudy(params.id)
             render (status: 200, text: (studyService.getCompleteStudy(params.id) as JSON), contentType: "application/json")
@@ -24,9 +48,15 @@ class StudyController {
         def data = request.JSON
         println "DATA"
         println data
+
+        
         if(data && data.studyId){
             def study = new Study()
+            study.date = data.date
             study.studyId = data.studyId 
+            study.complete = 0
+            study.safetyTriggered = 0
+
             study.save(failonError: true)
             println "STUDY"
             println study
@@ -37,6 +67,23 @@ class StudyController {
         }
     }
 
+    def delete(params){
+        if(params.id){
+            def study = Study.get(params.id)
+
+
+
+            if(study){
+                //def studyId =
+                //def marijuana = Marijuana.findByStudyId()
+                study.delete()
+                render (status: 200, contentType: "application/json")
+                return
+            }
+        }
+        render(status: 400, contentType: "application/json")
+
+    }
 /*
     def create(params) { 
         def data = request.JSON

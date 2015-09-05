@@ -55,6 +55,10 @@ class StudyService {
                 dayNumber: json.dayNumber,
             ])
         } 
+
+
+
+        
         println "JSON MAR"
         println json.marijuana
         marijuanaDay.used = json.marijuana ? 1 : 0
@@ -86,10 +90,7 @@ class StudyService {
         alcoholDay.save()
 
 
-        def personalDay = Personal.find {
-            date == json.date
-            study_id == json.study_id
-        }
+/*
 
         if(!personalDay){
             personalDay = new Personal([
@@ -98,9 +99,9 @@ class StudyService {
                 dayNumber: json.dayNumber,
             ])
         }
-
-        personalDay.title = json.title
-        personalDay.save()
+*/
+       // personalDay.title = json.title
+        //personalDay.save()
         return 
     }
 

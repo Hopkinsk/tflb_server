@@ -15,7 +15,7 @@ class PersonalService {
             study_id == study_id
         }   
         personal.each(){
-            response += [date: it.date, dayNumber: it.dayNumber, title: it.title, type: "personal" ]
+            response += [id: it.id, date: it.date, dayNumber: it.dayNumber, title: it.title, type: "personal" ]
         }
         return response
 	}

@@ -16,6 +16,20 @@ class DayController {
 	    "drinks" : 4
 	}
     */
+
+        /*
+
+    if someone edits the day then it will update and have 
+    study_id
+    date 
+    title [ "title a", "title b"]
+
+    
+    then it goes through and iterates all personal editvents 
+
+
+    */
+
     def studyService
 
     def save(params){
@@ -23,8 +37,7 @@ class DayController {
     	def json = request.JSON
     	println "json"
     	println json
-
-    	
+        println studyService.studyExists(json.study_id)
     	if(json.study_id && studyService.studyExists(json.study_id)){
     		studyService.updateStudyDay(json)
     		render (status: 200, contentType: "application/json")
@@ -41,6 +54,14 @@ class DayController {
     	} else {
     		render(status: 400, contentType: "application/json")
     	}
+    }
+
+
+
+    def delete(params){
+
+
+
     }
 
 }
