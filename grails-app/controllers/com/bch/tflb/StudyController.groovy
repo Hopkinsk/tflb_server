@@ -3,7 +3,7 @@ import com.bch.tflb.Study
 import com.bch.tflb.Alcohol
 import com.bch.tflb.Marijuana
 import grails.converters.JSON
-
+import org.apache.commons.io.IOUtils
 
 class StudyController {
 
@@ -30,9 +30,42 @@ class StudyController {
                 date: it.dateCreated
             ]
         }
-        */
+*/
         render (status: 200, text: (studies as JSON), contentType: "application/json")
 
+    }
+
+
+    //POST /study/export
+    def export(params){
+        println "PARAMS"
+        println params
+        if(params.containsKey("ids")){
+
+            def ids = JSON.parse(params.ids)
+
+            println "IDS"
+            println ids.getClass().name
+
+            if(ids){
+                def studiesFile = studyService.export(ids)
+                InputStream contentStream
+                try {
+                    response.setHeader "Content-disposition", "attachment;filename=test.csv"
+                    response.setHeader("Content-Length", studiesFile.length().toString())
+                    response.setContentType('text/csv');
+                    response.setHeader("Content-Type", "text/csv") 
+                    contentStream = studiesFile.newInputStream()
+                    response.outputStream << contentStream
+                    response.outputStream.flush()
+                   // webRequest.renderView = false
+
+                } finally {
+                    IOUtils.closeQuietly(contentStream)
+                }
+
+            }
+        }
     }
 
     def index(params){
@@ -51,18 +84,22 @@ class StudyController {
 
         
         if(data && data.studyId){
-            def study = new Study()
-            study.date = data.date
-            study.studyId = data.studyId 
-            study.complete = 0
-            study.safetyTriggered = 0
 
-            study.save(failonError: true)
-            println "STUDY"
-            println study
-            render (status: 200, text: (study as JSON), contentType: "application/json")
+            def validStudyId = studyService.validStudyId(data.studyId)
+            if(validStudyId){   
+            println "GOING" 
+                def study = new Study()
+                study.date = data.date
+                study.studyId = data.studyId 
+                study.complete = 0
+                study.safetyTriggered = 0
+                study.save(failonError: true)
+                render (status: 200, text: (study as JSON), contentType: "application/json")
+
+            } else {
+                render (status: 400, text: "Error: Study ID already exists.", contentType: "application/json")
+            }
         } else {
-            println "here"
             render(status: 400, contentType: "application/json")
         }
     }
@@ -74,6 +111,7 @@ class StudyController {
 
 
             if(study){
+                //TODO
                 //def studyId =
                 //def marijuana = Marijuana.findByStudyId()
                 study.delete()

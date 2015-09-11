@@ -19,4 +19,21 @@ class AlcoholService {
         }
         return response
 	}
+
+    def getAlcoholUseByDay(study_id, dayNumber){
+
+        def drinks = 0; 
+        def alcohol = Alcohol.findAll {
+            study_id == study_id
+            dayNumber == dayNumber
+        }   
+        if(alcohol){
+            println "acl!!!"
+            println alcohol.drinks.getClass().name
+            drinks = alcohol.drinks[0]
+        }
+        println "DRINKS FOR " + dayNumber + " IS " + drinks
+
+        return drinks
+    }
 }

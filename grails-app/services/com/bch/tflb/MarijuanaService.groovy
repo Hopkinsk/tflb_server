@@ -9,6 +9,19 @@ import com.bch.tflb.Marijuana
 @Transactional
 class MarijuanaService {
 
+    def getMarijuanaUseByDay(study_id, dayNumber){
+
+        def used = 0; 
+        def mar = Marijuana.findAll {
+            study_id == study_id
+            dayNumber == dayNumber
+        }   
+        if(mar){
+            used = mar.used[0]
+        }
+
+        return used
+    }
 	def getMarijuanaByStudy(study_id){
 		def response = []
         def marijuana = Marijuana.findAll {

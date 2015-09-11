@@ -14,6 +14,8 @@ class UrlMappings {
 		}
 
 
+        "/study/export" (controller: "study", action: "export", parseRequest: true)
+
         "/study/list" (controller: "study", action: "list", parseRequest: true)
 
         "/study/$id?"(controller: "study", parseRequest: true) {
