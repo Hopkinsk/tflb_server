@@ -28,11 +28,8 @@ class AlcoholService {
             dayNumber == dayNumber
         }   
         if(alcohol){
-            println "acl!!!"
-            println alcohol.drinks.getClass().name
             drinks = alcohol.drinks[0]
         }
-        println "DRINKS FOR " + dayNumber + " IS " + drinks
 
         return drinks
     }

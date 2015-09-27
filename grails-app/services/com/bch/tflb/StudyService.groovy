@@ -222,7 +222,7 @@ class StudyService {
                 alcKey = "day" + i + "_alc"
 
                 def drinks = alcoholService.getAlcoholUseByDay(id, i)
-                println "DRINSK " + drinks
+               // println "DRINSK " + drinks
                  
                 studyRow << [(alcKey): drinks]
                 alcKey = ""
@@ -249,13 +249,10 @@ class StudyService {
        file.write(string)
 
         def exportedStudy = File.createTempFile("test",".csv");
-        //def exportedStudy = new File("")
 
         exportedStudy.write(string)
-       // println exportedStudy.getAbsolutePath()  
-        return exportedStudy
-    //   render(file: new File(absolutePath), fileName: "book.pdf")
-
+        //return exportedStudy
+        return string
     }
 
     def getStudyIdById(id){
@@ -286,6 +283,7 @@ class StudyService {
             response.id = study.id
             response.studyId = study.studyId
             //response.status = study.status
+            response.date = study.date
             response.marijuana = marijuanaService.getMarijuanaByStudy(id)
             response.alcohol = alcoholService.getAlcoholByStudy(id)
             response.personal = personalService.getPersonalByStudy(id)

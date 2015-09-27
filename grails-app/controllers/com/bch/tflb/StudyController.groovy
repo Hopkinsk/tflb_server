@@ -40,32 +40,53 @@ class StudyController {
     def export(params){
         println "PARAMS"
         println params
+
+/*
+        File file = File.createTempFile("temp",".txt")
+        file.write("hello world!")
+        response.setHeader "Content-disposition", "attachment; filename=\"${file.name}\""
+        response.contentType = 'text-plain'
+        response.outputStream << file.text
+        response.outputStream.flush()
+
+  */
         if(params.containsKey("ids")){
 
             def ids = JSON.parse(params.ids)
 
             println "IDS"
             println ids.getClass().name
+            def studiesFile = studyService.export(ids)
 
+
+            render(status: 200, text: studiesFile, contentType: "text/csv")
+
+/*
             if(ids){
                 def studiesFile = studyService.export(ids)
+          
                 InputStream contentStream
                 try {
-                    response.setHeader "Content-disposition", "attachment;filename=test.csv"
-                    response.setHeader("Content-Length", studiesFile.length().toString())
-                    response.setContentType('text/csv');
-                    response.setHeader("Content-Type", "text/csv") 
-                    contentStream = studiesFile.newInputStream()
-                    response.outputStream << contentStream
-                    response.outputStream.flush()
-                   // webRequest.renderView = false
 
-                } finally {
-                    IOUtils.closeQuietly(contentStream)
+                    response.setHeader("Content-Type", "application/octet-stream") 
+                    response.setHeader("Content-disposition", "attachment; filename=test.csv")
+                    //response.setHeader("Content-Length", studiesFile.length() )
+                    
+                    response.outputStream << studiesFile.bytes// //studiesFile.newInputStream()
+                    response.outputStream.flush()
+                    response.outputStream.close()
+                    
+                    return
+
+                }  catch (e){ 
+                    println "ERROR" + e.message
+                  //  IOUtils.closeQuietly(contentStream)
                 }
 
             }
+            */
         }
+      
     }
 
     def index(params){
