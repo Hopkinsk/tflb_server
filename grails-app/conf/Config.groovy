@@ -97,6 +97,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
+        grails.serverURL = "https://tlfbsystem.tch.harvard.edu"
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }

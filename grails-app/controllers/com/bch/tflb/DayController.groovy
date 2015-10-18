@@ -36,8 +36,10 @@ class DayController {
     	println "SAVE CONTROLLER!"
     	def json = request.JSON
     	println "json"
-    	println json
+    	//println json
         println studyService.studyExists(json.study_id)
+
+
     	if(json.study_id && studyService.studyExists(json.study_id)){
     		studyService.updateStudyDay(json)
     		render (status: 200, contentType: "application/json")

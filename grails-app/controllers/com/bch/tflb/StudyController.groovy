@@ -102,18 +102,20 @@ class StudyController {
         def data = request.JSON
         println "DATA"
         println data
+        println "params"
+        println params
 
         
         if(data && data.studyId){
 
             def validStudyId = studyService.validStudyId(data.studyId)
             if(validStudyId){   
-            println "GOING" 
                 def study = new Study()
                 study.date = data.date
                 study.studyId = data.studyId 
                 study.complete = 0
                 study.safetyTriggered = 0
+                study.dailyMarijuana = 0
                 study.save(failonError: true)
                 render (status: 200, text: (study as JSON), contentType: "application/json")
 

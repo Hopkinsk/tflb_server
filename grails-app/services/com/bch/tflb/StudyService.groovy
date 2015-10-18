@@ -264,6 +264,7 @@ class StudyService {
 
     }
     def studyExists(id){
+        println "ID " + id
         if(Study.get(id)){
             return true
         } else {
@@ -280,13 +281,16 @@ class StudyService {
         def study = Study.get(id)
         def response = [:]
         if(study){
+            println "COMPLETE STUDY " + study.dailyMarijuana
             response.id = study.id
             response.studyId = study.studyId
+            response.dailyMarijuana = convertNumberToBool(study.dailyMarijuana)
             //response.status = study.status
             response.date = study.date
             response.marijuana = marijuanaService.getMarijuanaByStudy(id)
             response.alcohol = alcoholService.getAlcoholByStudy(id)
             response.personal = personalService.getPersonalByStudy(id)
+
             //response.safetyFlag = study.safetyFlag
         } else {
             response.error = "Study $id does not exist."
@@ -294,82 +298,75 @@ class StudyService {
         return response
     }
 
+    def convertNumberToBool(number){
+      if(number == 1){
+        return true
+      } else {
+        return false
+      }
+    }
+
     def updateStudyDay(json){
-        def marijuanaDay = Marijuana.find {
-            date == json.date
-            study_id == json.study_id
+        if(json.has("dailyMarijuana")){
+            def study = Study.findById(json.study_id, [lock: true])
+            def daily = json.dailyMarijuana ? 1 : 0
+            println "SAVING DAILY " + daily
+            study.dailyMarijuana = daily
+            study.save()
+            println "save errors " + study.errors
+            marijuanaService.handleDailyMarijuana(json)
+        } else {
+          println "REGULAR SAVING"
+          marijuanaService.saveMarijuana(json)
+
+          /*
+          def marijuanaDay = Marijuana.find {
+              date == json.date
+              study_id == json.study_id
+          }
+          if(!marijuanaDay){
+              marijuanaDay = new Marijuana([
+                  date: json.date,
+                  study_id: json.study_id,
+                  dayNumber: json.dayNumber,
+              ])
+          } 
+
+          marijuanaDay.used = json.marijuana ? 1 : 0
+          marijuanaDay.save(failOnError: true)
+          
+
+          def test = Marijuana.get(marijuanaDay.id)
+          println marijuanaService.getMarijuanaByStudy(test.study_id)
+          */
+
+          def alcoholDay = Alcohol.find {
+              date == json.date
+              study_id == json.study_id
+          }
+          if(!alcoholDay){
+              alcoholDay  = new Alcohol([
+                  date: json.date,
+                  study_id: json.study_id,
+                  dayNumber: json.dayNumber,
+              ])
+          } 
+          alcoholDay.drinks = json.drinks
+          alcoholDay.save()       
         }
-        if(!marijuanaDay){
-            marijuanaDay = new Marijuana([
-                date: json.date,
-                study_id: json.study_id,
-                dayNumber: json.dayNumber,
-            ])
-        } 
-
-
-
-        
-        println "JSON MAR"
-        println json.marijuana
-        marijuanaDay.used = json.marijuana ? 1 : 0
-        println "USE"
-        println marijuanaDay.used
-        marijuanaDay.save(failOnError: true)
-        println marijuanaDay.used
-        println marijuanaDay.errors
-        println marijuanaDay.id
-        def test = Marijuana.get(marijuanaDay.id)
-        println "TEST USED" 
-        println test.used
-
-        println marijuanaService.getMarijuanaByStudy(test.study_id)
-
-
-        def alcoholDay = Alcohol.find {
-            date == json.date
-            study_id == json.study_id
-        }
-        if(!alcoholDay){
-            alcoholDay  = new Alcohol([
-                date: json.date,
-                study_id: json.study_id,
-                dayNumber: json.dayNumber,
-            ])
-        } 
-        alcoholDay.drinks = json.drinks
-        alcoholDay.save()
-
-
-/*
-
-        if(!personalDay){
-            personalDay = new Personal([
-                date: json.date,
-                study_id: json.study_id,
-                dayNumber: json.dayNumber,
-            ])
-        }
-*/
-       // personalDay.title = json.title
-        //personalDay.save()
-        return 
     }
 
 
     def validStudyId(studyId){
-
-        def study = Study.findAll {
+/*
+        def study = Study.find {
             studyId == studyId
         }  
-
-        println "SDUY"
-        println study.size()
 
         if(study.size() > 0){
             return false
         }
-
+*/
         return true
     }
 
