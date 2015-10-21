@@ -21,7 +21,7 @@ class UrlMappings {
         "/study/$id?"(controller: "study", parseRequest: true) {
             action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
         }	
-        
+        "/study/$id/safety"(controller: "study", action:'safetyTriggered')
         "/event/$id?"(controller: "event", parseRequest: true) {
             action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
         }   

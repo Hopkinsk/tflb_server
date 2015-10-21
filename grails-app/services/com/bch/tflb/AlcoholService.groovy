@@ -20,6 +20,15 @@ class AlcoholService {
         return response
 	}
 
+    def deleteAllByStudy(study_id){
+        def alc = Alcohol.findAll {
+            study_id == study_id
+        }
+        alc.each { a ->
+          a.delete()
+        }
+    }
+
     def getAlcoholUseByDay(study_id, dayNumber){
 
         def drinks = 0; 
@@ -32,5 +41,18 @@ class AlcoholService {
         }
 
         return drinks
+    }
+
+    def safetyTriggered(study_id){
+        println "SAFETY TRIGGERED" + study_id
+        def trigger = Alcohol.findAll {
+            study_id == study_id
+            drinks >= 10
+        }
+        if(trigger){
+            return true
+        } else {
+            return false
+        }     
     }
 }

@@ -281,17 +281,15 @@ class StudyService {
         def study = Study.get(id)
         def response = [:]
         if(study){
-            println "COMPLETE STUDY " + study.dailyMarijuana
             response.id = study.id
             response.studyId = study.studyId
             response.dailyMarijuana = convertNumberToBool(study.dailyMarijuana)
-            //response.status = study.status
+            response.complete = convertNumberToBool(study.complete)
             response.date = study.date
             response.marijuana = marijuanaService.getMarijuanaByStudy(id)
             response.alcohol = alcoholService.getAlcoholByStudy(id)
             response.personal = personalService.getPersonalByStudy(id)
-
-            //response.safetyFlag = study.safetyFlag
+            response.safetyTriggered = alcoholService.safetyTriggered(id)
         } else {
             response.error = "Study $id does not exist."
         }
@@ -310,35 +308,11 @@ class StudyService {
         if(json.has("dailyMarijuana")){
             def study = Study.findById(json.study_id, [lock: true])
             def daily = json.dailyMarijuana ? 1 : 0
-            println "SAVING DAILY " + daily
             study.dailyMarijuana = daily
             study.save()
-            println "save errors " + study.errors
             marijuanaService.handleDailyMarijuana(json)
         } else {
-          println "REGULAR SAVING"
           marijuanaService.saveMarijuana(json)
-
-          /*
-          def marijuanaDay = Marijuana.find {
-              date == json.date
-              study_id == json.study_id
-          }
-          if(!marijuanaDay){
-              marijuanaDay = new Marijuana([
-                  date: json.date,
-                  study_id: json.study_id,
-                  dayNumber: json.dayNumber,
-              ])
-          } 
-
-          marijuanaDay.used = json.marijuana ? 1 : 0
-          marijuanaDay.save(failOnError: true)
-          
-
-          def test = Marijuana.get(marijuanaDay.id)
-          println marijuanaService.getMarijuanaByStudy(test.study_id)
-          */
 
           def alcoholDay = Alcohol.find {
               date == json.date
@@ -355,6 +329,7 @@ class StudyService {
           alcoholDay.save()       
         }
     }
+
 
 
     def validStudyId(studyId){

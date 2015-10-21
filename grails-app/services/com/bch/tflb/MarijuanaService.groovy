@@ -10,26 +10,33 @@ import com.bch.tflb.Marijuana
 class MarijuanaService {
 
     def saveMarijuana(json){
-          def marijuanaDay = Marijuana.find {
-              date == json.date
-              study_id == json.study_id
-          }
-          if(!marijuanaDay){
-              marijuanaDay = new Marijuana([
-                  date: json.date,
-                  study_id: json.study_id,
-                  dayNumber: json.dayNumber,
-              ])
-          } 
+      def marijuanaDay = Marijuana.find {
+          date == json.date
+          study_id == json.study_id
+      }
+      if(!marijuanaDay){
+          marijuanaDay = new Marijuana([
+              date: json.date,
+              study_id: json.study_id,
+              dayNumber: json.dayNumber,
+          ])
+      } 
 
-          marijuanaDay.used = json.marijuana ? 1 : 0
-          marijuanaDay.save(failOnError: true)
-          
-
-          def test = Marijuana.get(marijuanaDay.id)
-          //println getMarijuanaByStudy(test.study_id) 
+      marijuanaDay.used = json.marijuana ? 1 : 0
+      marijuanaDay.save(failOnError: true)
+      
+      def test = Marijuana.get(marijuanaDay.id)
+      //println getMarijuanaByStudy(test.study_id) 
     }
 
+    def deleteAllByStudy(study_id){
+        def mar = Marijuana.findAll {
+            study_id == study_id
+        }
+        mar.each { m ->
+          m.delete()
+        }
+    }
 
     //todo if dailymj false, iterate with marjauna false
     def handleDailyMarijuana(json){
@@ -47,11 +54,9 @@ class MarijuanaService {
             ])
         }
       } else {
-        println "ITERATING MJ"
         def mj = Marijuana.findAll { used == 1 }
         if(mj){
             mj.each { m -> 
-                //println "del"
                 m.delete()
             } 
         }

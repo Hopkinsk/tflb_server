@@ -8,9 +8,11 @@ import org.apache.commons.io.IOUtils
 class StudyController {
 
     def studyService
+    def alcoholService
+    def marijuanaService
+
 
     def list(){
-        println "LIST STUDIES"
         def studies = Study.findAll()
         println studies
         println studies as JSON
@@ -114,7 +116,6 @@ class StudyController {
                 study.date = data.date
                 study.studyId = data.studyId 
                 study.complete = 0
-                study.safetyTriggered = 0
                 study.dailyMarijuana = 0
                 study.save(failonError: true)
                 render (status: 200, text: (study as JSON), contentType: "application/json")
@@ -127,16 +128,30 @@ class StudyController {
         }
     }
 
+    def update(params){
+        def json = request.JSON
+        if(params.id){
+            def study = Study.get(params.id)
+            if(study){
+                if(json.studyComplete){
+                    study.complete = json.studyComplete ? 1 : 0
+                    study.save(failonError: true)
+                    def safetyTriggered = alcoholService.safetyTriggered(study.id)
+                    render (status: 200, text: [safetyTriggered: safetyTriggered] as JSON, contentType: "application/json")
+                    return
+                }
+            }
+        }
+        render(status: 400, contentType: "application/json")
+
+    }
+
     def delete(params){
         if(params.id){
             def study = Study.get(params.id)
-
-
-
             if(study){
-                //TODO
-                //def studyId =
-                //def marijuana = Marijuana.findByStudyId()
+                marijuanaService.deleteAllByStudy(study.id)
+                alcoholService.deleteAllByStudy(study.id)
                 study.delete()
                 render (status: 200, contentType: "application/json")
                 return
@@ -146,18 +161,17 @@ class StudyController {
 
     }
 /*
-    def create(params) { 
-        def data = request.JSON
-    	if(data && data.studyId){
-    		def study = new Study()
-    		study.studyId = data.studyId 
-    		study.save(failonError: true)
-            render (status: 200, text: (study as JSON), contentType: "application/json")
-    	} else {
-            render(status: 400, contentType: "application/json")
+    def safetyTriggered(params){
+        if(params.id){
+            def study = Study.get(params.id)
+            if(study){
+                def safetyTriggered = alcoholService.safetyTriggered(study.id)
+                render (status: 200, text: [safetyTriggered: safetyTriggered] as JSON, contentType: "application/json")
+                return
+            }
         }
+        render(status: 400, contentType: "application/json")
     }
 */
-
 
 }
