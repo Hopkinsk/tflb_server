@@ -63,7 +63,9 @@ grails {
     }
 }
 
-
+grails.resources.adhoc.includes = [
+    '/images/**', '/css/**', '/js/**', '/img/**', '/fonts/**'
+]
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
@@ -97,19 +99,28 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        grails.serverURL = "https://tlfbsystem.tch.harvard.edu"
+        grails.serverURL = "http://www.tlfbsystem.tch.harvard.edu"
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
-// log4j configuration
+def logLocation = (System.getProperty('catalina.base') ?: 'target') + '/logs/application.log'
 log4j = {
+    appenders {
+         appender new org.apache.log4j.DailyRollingFileAppender(name:"file", fileName:logLocation,
+                datePattern: '\'_\'yyyy-MM-dd', layout:pattern(conversionPattern: '%d{ISO8601}\t%p\t%c:%L\t%m%n'))
+    }
+
+// log4j configuration
+//log4j = {
     // Example of changing the log pattern for the default console appender:
     //
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-
+    root {
+        info 'stdout', 'file'
+    }
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -120,5 +131,6 @@ log4j = {
            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
            'org.springframework',
            'org.hibernate',
-           'net.sf.ehcache.hibernate'
+           'net.sf.ehcache.hibernate',
+           'org.tomcat.'
 }
