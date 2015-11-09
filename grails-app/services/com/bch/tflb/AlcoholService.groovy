@@ -44,7 +44,6 @@ class AlcoholService {
     }
 
     def safetyTriggered(study_id){
-        println "SAFETY TRIGGERED" + study_id
         def trigger = Alcohol.findAll {
             study_id == study_id
             drinks >= 10

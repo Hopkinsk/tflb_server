@@ -26,7 +26,6 @@ class MarijuanaService {
       marijuanaDay.save(failOnError: true)
       
       def test = Marijuana.get(marijuanaDay.id)
-      //println getMarijuanaByStudy(test.study_id) 
     }
 
     def deleteAllByStudy(study_id){
@@ -38,11 +37,8 @@ class MarijuanaService {
         }
     }
 
-    //todo if dailymj false, iterate with marjauna false
-    def handleDailyMarijuana(json){
-      println "handle daily mj"
-      println json.dailyMarijuana
 
+    def handleDailyMarijuana(json){
       def days = json.days
       if(json.dailyMarijuana){
         days.each{ day ->

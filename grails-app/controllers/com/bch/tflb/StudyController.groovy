@@ -14,100 +14,36 @@ class StudyController {
 
     def list(){
         def studies = Study.findAll()
-        println studies
-        println studies as JSON
-        studies.each { study ->
-            println study as JSON
-
-        }
-/*
-        def studies = Study.find().collect {
-
-            [
-               // id: it.id,
-
-               // studyId: it.study_id,
-                complete: it.complete,
-                safetyTriggered: it.safety_triggered,
-                date: it.dateCreated
-            ]
-        }
-*/
         render (status: 200, text: (studies as JSON), contentType: "application/json")
-
     }
 
-
-    //POST /study/export
     def export(params){
-        println "PARAMS"
-        println params
-
-/*
-        File file = File.createTempFile("temp",".txt")
-        file.write("hello world!")
-        response.setHeader "Content-disposition", "attachment; filename=\"${file.name}\""
-        response.contentType = 'text-plain'
-        response.outputStream << file.text
-        response.outputStream.flush()
-
-  */
         if(params.containsKey("ids")){
-
             def ids = JSON.parse(params.ids)
-
-            println "IDS"
-            println ids.getClass().name
             def studiesFile = studyService.export(ids)
-
-
-            render(status: 200, text: studiesFile, contentType: "text/csv")
-
-/*
-            if(ids){
-                def studiesFile = studyService.export(ids)
-          
-                InputStream contentStream
-                try {
-
-                    response.setHeader("Content-Type", "application/octet-stream") 
-                    response.setHeader("Content-disposition", "attachment; filename=test.csv")
-                    //response.setHeader("Content-Length", studiesFile.length() )
-                    
-                    response.outputStream << studiesFile.bytes// //studiesFile.newInputStream()
-                    response.outputStream.flush()
-                    response.outputStream.close()
-                    
-                    return
-
-                }  catch (e){ 
-                    println "ERROR" + e.message
-                  //  IOUtils.closeQuietly(contentStream)
-                }
-
-            }
-            */
-        }
-      
+            response.setContentType("text/csv")
+            response.setHeader("Content-disposition", "attachment; filename=\"tflb_export.csv\"")
+            response.outputStream << studiesFile.bytes
+            response.outputStream.flush()
+            response.outputStream.close()
+        }   
     }
 
     def index(params){
         if(params.id){
-            studyService.getCompleteStudy(params.id)
-            render (status: 200, text: (studyService.getCompleteStudy(params.id) as JSON), contentType: "application/json")
+            def study = studyService.getCompleteStudy(params.id)
+            if(!study.error){
+                render (status: 200, text: (study as JSON), contentType: "application/json")
+            } else {
+                render (status: 400, text: (study as JSON), contentType: "application/json")
+
+            }
         }
         render(status: 400, contentType: "application/json")
     }
 
     def save(params){
-        println "SAVE STUDY "
         def data = request.JSON
-        println "DATA"
-        println data
-        println "params"
-        println params
-
-        
         if(data && data.studyId){
 
             def validStudyId = studyService.validStudyId(data.studyId)
