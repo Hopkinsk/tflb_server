@@ -18,10 +18,7 @@ class StudyService {
 
     def export(ids){
         def sw = new StringWriter()
-           def b = new CSVWriter(sw, {
-
-    
-             
+           def b = new CSVWriter(sw, {    
               "Study ID" { it.study_id }
               col2: "Alc1" { it.day1_alc }
               col3: "Alc2" { it.day2_alc }
@@ -224,7 +221,6 @@ class StudyService {
                 alcKey = ""
             }
 
-
             def marKey = ""
             for (def i = 1; i <91; i++) {
                 marKey  = "day" + i
@@ -239,16 +235,10 @@ class StudyService {
         }
 
         def string = b.writer.toString()
-
-
-      // def file = new File("/Users/khopkins/repos/tflb_server/grails-app/services/com/bch/tflb/test.csv")
-       //file.write(string)
-
         def exportedStudy = File.createTempFile("test",".csv");
 
         exportedStudy.write(string)
         return exportedStudy
-        //return string
     }
 
     def getStudyIdById(id){
