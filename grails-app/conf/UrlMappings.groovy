@@ -7,12 +7,9 @@ class UrlMappings {
             }
         }
         
-                //"/study/list" (controller: "study", action: "list", parseRequest: true)
-
 		"/day/$id?"(controller: "day", parseRequest: true) {
 			action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
 		}
-
 
         "/study/export" (controller: "study", action: "export", parseRequest: true)
 
@@ -25,7 +22,6 @@ class UrlMappings {
         "/event/$id?"(controller: "event", parseRequest: true) {
             action = [GET: "index", PUT: "update", PATCH: "update", DELETE: "delete", POST: "save"]
         }   
-
 
         "/"(view:"/index")
         "500"(view:'/error')

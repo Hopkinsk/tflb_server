@@ -30,7 +30,6 @@ class AlcoholService {
     }
 
     def getAlcoholUseByDay(study_id, dayNumber){
-
         def drinks = 0; 
         def alcohol = Alcohol.findAll {
             study_id == study_id

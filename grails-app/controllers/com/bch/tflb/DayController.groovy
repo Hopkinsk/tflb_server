@@ -28,13 +28,4 @@ class DayController {
     		render(status: 400, contentType: "application/json")
     	}
     }
-
-
-
-    def delete(params){
-
-
-
-    }
-
 }

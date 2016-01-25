@@ -18,7 +18,7 @@ class StudyService {
 
     def export(ids){
         def sw = new StringWriter()
-           def b = new CSVWriter(sw, {    
+        def b = new CSVWriter(sw, {    
               "Study ID" { it.study_id }
               col2: "Alc1" { it.day1_alc }
               col3: "Alc2" { it.day2_alc }
@@ -201,22 +201,14 @@ class StudyService {
              "Mj89" { it.day89 }
              "Mj90" { it.day80 }              
            })
-
-
         def studyRow = [:]
-
-
         ids.each { id ->
             studyRow = [:]
             studyRow << [study_id: getStudyIdById(id)]
-
             def alcKey = ""
             for (def i = 1; i <91; i++) {
                 alcKey = "day" + i + "_alc"
-
-                def drinks = alcoholService.getAlcoholUseByDay(id, i)
-               // println "DRINSK " + drinks
-                 
+                def drinks = alcoholService.getAlcoholUseByDay(id, i)                 
                 studyRow << [(alcKey): drinks]
                 alcKey = ""
             }
@@ -225,18 +217,14 @@ class StudyService {
             for (def i = 1; i <91; i++) {
                 marKey  = "day" + i
                 def marUse = marijuanaService.getMarijuanaUseByDay(id, i)
-
-                 
                 studyRow << [(marKey): marUse]
                 marKey = ""
             }
-
             b << studyRow
         }
 
         def string = b.writer.toString()
         def exportedStudy = File.createTempFile("test",".csv");
-
         exportedStudy.write(string)
         return exportedStudy
     }
@@ -249,17 +237,17 @@ class StudyService {
         return false
 
     }
+
     def studyExists(id){
         if(Study.get(id)){
             return true
         } else {
             return false
         }
-
     }
 
     def getCompleteStudy(studyId){
-        def study = Study.findByStudyId(studyId, [lock: true])//Study.get(id)
+        def study = Study.findByStudyId(studyId, [lock: true])
         def response = [:]
         if(study){
             response.id = study.id
@@ -294,7 +282,6 @@ class StudyService {
             marijuanaService.handleDailyMarijuana(json)
         } else {
           marijuanaService.saveMarijuana(json)
-
           def alcoholDay = Alcohol.find {
               date == json.date
               study_id == json.study_id
@@ -311,18 +298,13 @@ class StudyService {
         }
     }
 
-
-
     def validStudyId(studyId){
         def study = Study.findAll {
             studyId == studyId
         }  
-
         if(study.size() > 0){
             return false
         }
-
         return true
     }
-
 }

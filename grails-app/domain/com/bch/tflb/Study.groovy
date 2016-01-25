@@ -1,8 +1,6 @@
 package com.bch.tflb
 import java.util.Date
 
-
-
 class Study {
 	String studyId
 	Integer complete 

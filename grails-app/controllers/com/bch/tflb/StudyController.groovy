@@ -36,7 +36,6 @@ class StudyController {
                 render (status: 200, text: (study as JSON), contentType: "application/json")
             } else {
                 render (status: 400, text: (study as JSON), contentType: "application/json")
-
             }
         }
         render(status: 400, contentType: "application/json")
@@ -45,7 +44,6 @@ class StudyController {
     def save(params){
         def data = request.JSON
         if(data && data.studyId){
-
             def validStudyId = studyService.validStudyId(data.studyId)
             if(validStudyId){   
                 def study = new Study()
@@ -55,7 +53,6 @@ class StudyController {
                 study.dailyMarijuana = 0
                 study.save(failonError: true)
                 render (status: 200, text: (study as JSON), contentType: "application/json")
-
             } else {
                 render (status: 400, text: "Error: Study ID already exists.", contentType: "application/json")
             }
@@ -79,7 +76,6 @@ class StudyController {
             }
         }
         render(status: 400, contentType: "application/json")
-
     }
 
     def delete(params){
@@ -94,20 +90,5 @@ class StudyController {
             }
         }
         render(status: 400, contentType: "application/json")
-
     }
-/*
-    def safetyTriggered(params){
-        if(params.id){
-            def study = Study.get(params.id)
-            if(study){
-                def safetyTriggered = alcoholService.safetyTriggered(study.id)
-                render (status: 200, text: [safetyTriggered: safetyTriggered] as JSON, contentType: "application/json")
-                return
-            }
-        }
-        render(status: 400, contentType: "application/json")
-    }
-*/
-
 }
