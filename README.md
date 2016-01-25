@@ -12,9 +12,9 @@ Setup
 	* (Set DB configs in /grails-app/conf/DataSource.groovy) 
 * In the project directory run:
 	* ```grails clean``` //Cleans project
-	* ```grails refresh-dependencies``` //Loads dependencies 
-	* ```./create_tflb_links.sh``` 		//Connects tflb_portal. Portal must be built with grunt with production urls turned on.
-	* ```grails -reloading run-app```	//Runs server locally on port 8080
+	* ```grails refresh-dependencies``` // Loads dependencies 
+	* ```./create_tflb_links.sh``` 		// Connects tflb_portal. Portal must be built with grunt with production urls turned on.
+	* ```grails -reloading run-app```	// Runs server locally on port 8080
 
 
 Integrating the frontend
