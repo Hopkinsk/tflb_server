@@ -8,6 +8,8 @@ Setup
 * Install Java 7 (Java 1.7 JDK) and ensure “$ java -version” in terminal shows “1.7.*” as default
 * Install and set default grails version to 2.3.9 via [sdkman](http://sdkman.io/install.html)
 * Install and run [SQLite](https://www.sqlite.org/)
+	* Create SQL table'tflb'
+	* (Set DB configs in /grails-app/conf/DataSource.groovy) 
 * In the project directory run:
 	* ```grails clean``` //Cleans project
 	* ```grails refresh-dependencies``` //Loads dependencies 
@@ -15,18 +17,15 @@ Setup
 	* ```grails -reloading run-app```	//Runs server locally on port 8080
 
 
-
 Integrating the frontend
 ------------------------
-Run create_tflb_links.sh
+* Follow instructions to build tflb-portal front-end 
+* Run create_tflb_links.sh to create symbolic links to tflb-portal 
 
-- web-app/css -> <path-to-html-project>/pathologistportal/static/css web-app/css
- - ln -s ../../pathologistportal/dist/release_bundle/static/css
-- web-app/images -> <path-to-html-project>/pathologistportal/dist/release_bundle/static/images
- - ln -s ../../pathologistportal/dist/release_bundle/static/images
-- web-app/js -> <path-to-html-project>/pathologistportal/dist/release_bundle/static/js
- - ln -s ../../pathologistportal/dist/release_bundle/static/js
-- grails-app/views/index.gsp -> <path-to-html-project>/pathologistportal/dist/release_bundle/index.gsp
- 
+
+Authentication
+---------------
+Currently, there is no authentication on the project. LDAP can be configured: https://grails.org/plugin/ldap
+A general password 'asap' is set to view the application. This password is set statically in /tflb-portal/app/apps/study/views.js
 
 
